@@ -22,12 +22,14 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class SwitchStmtTest {
     @Test
@@ -56,5 +58,16 @@ class SwitchStmtTest {
     }
 
 
+    @Test
+    void jep441Example1() {
+        SwitchStmt switchStmt = parseStatement("switch (day) {\n" +
+                "   case null, default -> System.out.println(-1);\n" +
+                "}"
+        ).asSwitchStmt();
+
+        assertEquals(EXPRESSION, switchStmt.getEntry(0).getType());
+        assertEquals(1, switchStmt.getEntry(0).getLabels().size());
+        assertInstanceOf(NullLiteralExpr.class, switchStmt.getEntry(0).getLabels().get(0));
+    }
 
 }

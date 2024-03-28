@@ -4601,11 +4601,17 @@ SwitchEntry SwitchEntry():
 {
     (
         "case" { begin=token(); }
-        label = ConditionalExpression() { labels = add(labels, label); }
         (
+            LOOKAHEAD(3) label = NullLiteral() { labels = add(labels, label); }
             ","
-            label = ConditionalExpression()  { labels = add(labels, label); }
-        )*
+            "default"
+         |
+            label = ConditionalExpression() { labels = add(labels, label); }
+            (
+                ","
+                label = ConditionalExpression()  { labels = add(labels, label); }
+            )*
+        )
      |
         "default" { begin=token(); }
     )
