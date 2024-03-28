@@ -3337,6 +3337,19 @@ PatternExpr PatternExpression():
     { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
+SwitchPatternExpr SwitchPatternExpression():
+{
+    PatternExpr pattern;
+    Expression guard = null;
+}
+{
+    pattern = PatternExpression()
+    [
+        "when"
+        guard = Expression()
+    ]
+    { return new SwitchPatternExpr(range(pattern, token()), pattern, guard); }
+}
 
 /**
  * // Note that instanceof is a {@code RelationalExpression} within the JLS, which differs from JavaParser
@@ -4605,6 +4618,8 @@ SwitchEntry SwitchEntry():
             LOOKAHEAD(3) label = NullLiteral() { labels = add(labels, label); }
             ","
             "default"
+         |
+            LOOKAHEAD(3) label = PatternExpression() { labels = add(labels, label); }
          |
             label = ConditionalExpression() { labels = add(labels, label); }
             (

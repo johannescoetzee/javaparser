@@ -23,6 +23,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
@@ -70,4 +71,15 @@ class SwitchStmtTest {
         assertInstanceOf(NullLiteralExpr.class, switchStmt.getEntry(0).getLabels().get(0));
     }
 
+    @Test
+    void jep441Example2() {
+        SwitchStmt switchStmt = parseStatement("switch (day) {\n" +
+                "   case Integer i -> System.out.println(i);\n" +
+                "}"
+        ).asSwitchStmt();
+
+        assertEquals(EXPRESSION, switchStmt.getEntry(0).getType());
+        assertEquals(1, switchStmt.getEntry(0).getLabels().size());
+        assertInstanceOf(PatternExpr.class, switchStmt.getEntry(0).getLabels().get(0));
+    }
 }
