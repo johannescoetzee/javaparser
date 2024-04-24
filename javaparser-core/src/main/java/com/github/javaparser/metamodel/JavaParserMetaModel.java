@@ -215,6 +215,9 @@ public final class JavaParserMetaModel {
         textBlockLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         thisExprMetaModel.getConstructorParameters().add(thisExprMetaModel.typeNamePropertyMetaModel);
         typeExprMetaModel.getConstructorParameters().add(typeExprMetaModel.typePropertyMetaModel);
+        typePatternExprMetaModel.getConstructorParameters().add(typePatternExprMetaModel.modifiersPropertyMetaModel);
+        typePatternExprMetaModel.getConstructorParameters().add(typePatternExprMetaModel.typePropertyMetaModel);
+        typePatternExprMetaModel.getConstructorParameters().add(typePatternExprMetaModel.namePropertyMetaModel);
         unaryExprMetaModel.getConstructorParameters().add(unaryExprMetaModel.expressionPropertyMetaModel);
         unaryExprMetaModel.getConstructorParameters().add(unaryExprMetaModel.operatorPropertyMetaModel);
         variableDeclarationExprMetaModel.getConstructorParameters().add(variableDeclarationExprMetaModel.modifiersPropertyMetaModel);
@@ -400,6 +403,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(typeExprMetaModel);
         nodeMetaModels.add(typeMetaModel);
         nodeMetaModels.add(typeParameterMetaModel);
+        nodeMetaModels.add(typePatternExprMetaModel);
         nodeMetaModels.add(unaryExprMetaModel);
         nodeMetaModels.add(unionTypeMetaModel);
         nodeMetaModels.add(unknownTypeMetaModel);
@@ -687,6 +691,12 @@ public final class JavaParserMetaModel {
         thisExprMetaModel.getDeclaredPropertyMetaModels().add(thisExprMetaModel.typeNamePropertyMetaModel);
         typeExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(typeExprMetaModel, "type", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false);
         typeExprMetaModel.getDeclaredPropertyMetaModels().add(typeExprMetaModel.typePropertyMetaModel);
+        typePatternExprMetaModel.modifiersPropertyMetaModel = new PropertyMetaModel(typePatternExprMetaModel, "modifiers", com.github.javaparser.ast.Modifier.class, Optional.of(modifierMetaModel), false, false, true, false);
+        typePatternExprMetaModel.getDeclaredPropertyMetaModels().add(typePatternExprMetaModel.modifiersPropertyMetaModel);
+        typePatternExprMetaModel.namePropertyMetaModel = new PropertyMetaModel(typePatternExprMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false);
+        typePatternExprMetaModel.getDeclaredPropertyMetaModels().add(typePatternExprMetaModel.namePropertyMetaModel);
+        typePatternExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(typePatternExprMetaModel, "type", com.github.javaparser.ast.type.ReferenceType.class, Optional.of(referenceTypeMetaModel), false, false, false, false);
+        typePatternExprMetaModel.getDeclaredPropertyMetaModels().add(typePatternExprMetaModel.typePropertyMetaModel);
         unaryExprMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(unaryExprMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false);
         unaryExprMetaModel.getDeclaredPropertyMetaModels().add(unaryExprMetaModel.expressionPropertyMetaModel);
         unaryExprMetaModel.operatorPropertyMetaModel = new PropertyMetaModel(unaryExprMetaModel, "operator", com.github.javaparser.ast.expr.UnaryExpr.Operator.class, Optional.empty(), false, false, false, false);
@@ -781,8 +791,6 @@ public final class JavaParserMetaModel {
         switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.statementsPropertyMetaModel);
         switchEntryMetaModel.typePropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "type", com.github.javaparser.ast.stmt.SwitchEntry.Type.class, Optional.empty(), false, false, false, false);
         switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.typePropertyMetaModel);
-        switchEntryMetaModel.guardedEntryPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "guardedEntry", boolean.class, Optional.empty(), false, false, false, false);
-        switchEntryMetaModel.getDerivedPropertyMetaModels().add(switchEntryMetaModel.guardedEntryPropertyMetaModel);
         switchEntryMetaModel.switchStatementEntryPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "switchStatementEntry", boolean.class, Optional.empty(), false, false, false, false);
         switchEntryMetaModel.getDerivedPropertyMetaModels().add(switchEntryMetaModel.switchStatementEntryPropertyMetaModel);
         switchStmtMetaModel.entriesPropertyMetaModel = new PropertyMetaModel(switchStmtMetaModel, "entries", com.github.javaparser.ast.stmt.SwitchEntry.class, Optional.of(switchEntryMetaModel), false, false, true, false);
@@ -1076,6 +1084,9 @@ public final class JavaParserMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final TypeExprMetaModel typeExprMetaModel = new TypeExprMetaModel(Optional.of(expressionMetaModel));
+
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    public static final TypePatternExprMetaModel typePatternExprMetaModel = new TypePatternExprMetaModel(Optional.of(expressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnaryExprMetaModel unaryExprMetaModel = new UnaryExprMetaModel(Optional.of(expressionMetaModel));

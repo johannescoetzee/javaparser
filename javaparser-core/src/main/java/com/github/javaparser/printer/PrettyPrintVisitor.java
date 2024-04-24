@@ -25,12 +25,10 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -57,7 +55,7 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
-	private static Pattern RTRIM = Pattern.compile("\\s+$");
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected PrettyPrinterConfiguration configuration;
 
@@ -305,7 +303,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 }
             }
         }
-        if(!n.getPermittedTypes().isEmpty()){
+        if (!n.getPermittedTypes().isEmpty()) {
             printer.print(" permits ");
             for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
@@ -402,7 +400,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                     printer.println(line);
                 }
             }
-            printer.println(" "+n.getFooter());
+            printer.println(" " + n.getFooter());
         }
     }
 
@@ -738,6 +736,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final PatternExpr n, final Void arg) {
+        printModifiers(n.getModifiers());
+        n.getType().accept(this, arg);
+        printer.print(" ");
+        n.getName().accept(this, arg);
+    }
+
+    @Override
+    public void visit(final TypePatternExpr n, final Void arg) {
         printModifiers(n.getModifiers());
         n.getType().accept(this, arg);
         printer.print(" ");
@@ -1249,12 +1255,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             if (n.getLabels().isNonEmpty() && n.isDefault()) {
                 printer.print(", default");
             }
-
             if (n.getGuard().isPresent()) {
                 printer.print(" when ");
                 n.getGuard().get().accept(this, arg);
             }
-
             printer.print(separator);
         }
         printer.println();
@@ -1319,9 +1323,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            final boolean alignVertically = // Either we hit the constant amount limit in the configurations, or...
-            n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || // any of the constants has a comment.
-            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+            final boolean // Either we hit the constant amount limit in the configurations, or...
+            // Either we hit the constant amount limit in the configurations, or...
+            // any of the constants has a comment.
+            alignVertically = n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();

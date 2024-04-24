@@ -241,4 +241,6 @@ public interface GenericVisitor<R, A> {
     R visit(TextBlockLiteralExpr n, A arg);
 
     R visit(PatternExpr n, A arg);
+
+    R visit(TypePatternExpr n, A arg);
 }

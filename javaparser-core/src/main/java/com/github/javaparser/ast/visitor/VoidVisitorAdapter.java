@@ -752,4 +752,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
+
+    @Override
+    public void visit(final TypePatternExpr n, final A arg) {
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getType().accept(this, arg);
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
 }
