@@ -68,6 +68,13 @@ public interface ResolvedDeclaration extends AssociableToAST {
     }
 
     /**
+     * Does this declaration represents a type pattern declaration?
+     */
+    default boolean isTypePattern() {
+        return false;
+    }
+
+    /**
      * Does this declaration represents a method parameter?
      */
     default boolean isParameter() {
@@ -130,5 +137,12 @@ public interface ResolvedDeclaration extends AssociableToAST {
      */
     default ResolvedPatternDeclaration asPattern() {
         throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
+    }
+
+    /**
+     * Return this as a TypePatternDeclaration or throw an UnsupportedOperationException
+     */
+    default ResolvedTypePatternDeclaration asTypePattern() {
+        throw new UnsupportedOperationException(String.format("%s is not a TypePattern", this));
     }
 }
