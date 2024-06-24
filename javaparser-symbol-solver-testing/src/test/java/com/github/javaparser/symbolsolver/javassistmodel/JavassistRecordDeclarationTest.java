@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -35,15 +37,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
@@ -61,58 +60,50 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testIsClass() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isClass());
     }
 
     @Test
     void testIsInterface() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isInterface());
     }
 
     @Test
     void testIsEnum() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isEnum());
     }
 
     @Test
     void testIsRecord() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isRecord());
     }
 
     @Test
     void testIsTypeVariable() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isTypeParameter());
     }
 
     @Test
     void testIsType() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isType());
     }
 
     @Test
     void testAsType() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asType());
     }
 
     @Test
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit =
-                    (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
@@ -120,8 +111,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     @Test
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit =
-                    (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
@@ -129,44 +119,38 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     @Test
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit =
-                    (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asEnum();
         });
     }
 
     @Test
     void testAsRecord() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asRecord());
     }
 
     @Test
     void testGetPackageName() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box", compilationUnit.getPackageName());
     }
 
     @Test
     void testGetClassName() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("Box", compilationUnit.getClassName());
     }
 
     @Test
     void testGetQualifiedName() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box.Box", compilationUnit.getQualifiedName());
     }
 
     @Test
     void testGetGenericTypeField() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
         assertEquals(1, declarationList.size());
 
@@ -182,8 +166,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetDeclaredMethods() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         Set<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
         assertEquals(5, methodsSet.size());
 
@@ -210,8 +193,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetSuperclass() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 "java.lang.Record",
                 compilationUnit
@@ -222,8 +204,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetAllSuperclasses() {
-        JavassistRecordDeclaration cu =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object"),
                 cu.getAllSuperClasses().stream()
@@ -233,8 +214,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetAllAncestorsWithDepthFirstTraversalOrder() {
-        JavassistRecordDeclaration cu =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object", "box.Foo"),
                 cu.getAllAncestors().stream()
@@ -244,8 +224,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetInterfaces() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getInterfaces().stream()
@@ -255,14 +234,12 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
     @Test
     void testGetAllInterfaces() {
-        JavassistRecordDeclaration compilationUnit =
-                (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getAllInterfaces().stream()
                         .map(ResolvedReferenceType::getQualifiedName)
                         .collect(Collectors.toSet()));
-
     }
 
     @Override

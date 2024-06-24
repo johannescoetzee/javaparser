@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
@@ -31,16 +33,13 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderType
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
 class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
@@ -60,7 +59,8 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
             }
         }
     };
-    private TypeSolver typeSolver = new CombinedTypeSolver(new ClassLoaderTypeSolver(classLoader), new ReflectionTypeSolver());
+    private TypeSolver typeSolver =
+            new CombinedTypeSolver(new ClassLoaderTypeSolver(classLoader), new ReflectionTypeSolver());
 
     /**
      * The test classes were compiled with Java 17, so attempting to load them with any lower version will crash
@@ -68,56 +68,49 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsClass() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isClass());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsInterface() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isInterface());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsEnum() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isEnum());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsRecord() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isRecord());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsTypeVariable() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isTypeParameter());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsType() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isType());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsType() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asType());
     }
 
@@ -125,8 +118,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            ReflectionRecordDeclaration compilationUnit =
-                    (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
@@ -135,8 +127,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            ReflectionRecordDeclaration compilationUnit =
-                    (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
@@ -145,8 +136,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            ReflectionRecordDeclaration compilationUnit =
-                    (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asEnum();
         });
     }
@@ -154,40 +144,35 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsRecord() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asRecord());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetPackageName() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box", compilationUnit.getPackageName());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetClassName() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("Box", compilationUnit.getClassName());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetQualifiedName() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box.Box", compilationUnit.getQualifiedName());
     }
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetGenericTypeField() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
         assertEquals(1, declarationList.size());
 
@@ -204,8 +189,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetDeclaredMethods() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         Set<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
         assertEquals(5, methodsSet.size());
 
@@ -233,8 +217,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetSuperclass() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 "java.lang.Record",
                 compilationUnit
@@ -246,8 +229,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllSuperclasses() {
-        ReflectionRecordDeclaration cu =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration cu = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object"),
                 cu.getAllSuperClasses().stream()
@@ -258,8 +240,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllAncestorsWithDepthFirstTraversalOrder() {
-        ReflectionRecordDeclaration cu =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration cu = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object", "box.Foo"),
                 cu.getAllAncestors().stream()
@@ -270,8 +251,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetInterfaces() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getInterfaces().stream()
@@ -282,13 +262,11 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllInterfaces() {
-        ReflectionRecordDeclaration compilationUnit =
-                (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getAllInterfaces().stream()
                         .map(ResolvedReferenceType::getQualifiedName)
                         .collect(Collectors.toSet()));
-
     }
 }
