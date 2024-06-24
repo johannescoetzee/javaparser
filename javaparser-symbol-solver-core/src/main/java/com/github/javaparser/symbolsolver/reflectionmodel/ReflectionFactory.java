@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration.isRecordType;
+
 /**
  * @author Federico Tomassetti
  */
@@ -57,6 +59,9 @@ public class ReflectionFactory {
         }
         if (clazz.isEnum()) {
             return new ReflectionEnumDeclaration(clazz, typeSolver);
+        }
+        if (isRecordType(clazz)) {
+            return new ReflectionRecordDeclaration(clazz, typeSolver);
         }
         return new ReflectionClassDeclaration(clazz, typeSolver);
     }
