@@ -868,52 +868,31 @@ public class ConcreteSyntaxModel {
                 sequence(
                         comment(),
                         conditional(
+                                ObservableProperty.LABELS,
+                                IS_NOT_EMPTY,
+                                sequence(
+                                    token(GeneratedJavaParserConstants.CASE),
+                                    space(),
+                                    list(ObservableProperty.LABELS),
+                                    conditional(
+                                            ObservableProperty.DEFAULT,
+                                            FLAG,
+                                            sequence(
+                                                    comma(),
+                                                    space(),
+                                                    token(GeneratedJavaParserConstants._DEFAULT),
+                                            )
+                                    )
+                                ),
+                                token(GeneratedJavaParserConstants._DEFAULT)
+                        ),
+                        space(),
+                        conditional(
                                 SWITCH_STATEMENT_ENTRY,
                                 FLAG,
-                                conditional(
-                                        ObservableProperty.LABELS,
-                                        IS_NOT_EMPTY,
-                                        sequence(
-                                                token(GeneratedJavaParserConstants.CASE),
-                                                space(),
-                                                list(ObservableProperty.LABELS),
-                                                token(GeneratedJavaParserConstants.COLON)),
-                                        sequence(
-                                                token(GeneratedJavaParserConstants._DEFAULT),
-                                                token(GeneratedJavaParserConstants.COLON))),
-                                conditional(
-                                        ObservableProperty.LABELS,
-                                        IS_NOT_EMPTY,
-                                        conditional(
-                                                ObservableProperty.DEFAULT,
-                                                FLAG,
-                                                sequence(
-                                                        token(GeneratedJavaParserConstants.CASE),
-                                                        space(),
-                                                        list(ObservableProperty.LABELS),
-                                                        comma(),
-                                                        space(),
-                                                        token(GeneratedJavaParserConstants._DEFAULT),
-                                                        space(),
-                                                        token(GeneratedJavaParserConstants.ARROW)),
-                                                sequence(
-                                                        token(GeneratedJavaParserConstants.CASE),
-                                                        space(),
-                                                        list(ObservableProperty.LABELS),
-                                                        conditional(
-                                                                ObservableProperty.GUARD,
-                                                                IS_PRESENT,
-                                                                sequence(
-                                                                        space(),
-                                                                        token(GeneratedJavaParserConstants.WHEN),
-                                                                        space(),
-                                                                        child(ObservableProperty.GUARD))),
-                                                        space(),
-                                                        token(GeneratedJavaParserConstants.ARROW))),
-                                        sequence(
-                                                token(GeneratedJavaParserConstants._DEFAULT),
-                                                space(),
-                                                token(GeneratedJavaParserConstants.ARROW)))),
+                                token(GeneratedJavaParserConstants.COLON),
+                                token(GeneratedJavaParserConstants.ARROW)
+                        ),
                         newline(),
                         indent(),
                         list(ObservableProperty.STATEMENTS, newline(), none(), newline()),

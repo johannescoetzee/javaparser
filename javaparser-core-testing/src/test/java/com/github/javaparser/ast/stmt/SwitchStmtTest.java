@@ -22,8 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
-import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
+import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ParserConfiguration;
@@ -32,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -66,6 +66,32 @@ class SwitchStmtTest {
         assertFalse(switchStmt.getEntry(0).isDefault());
         assertFalse(switchStmt.getEntry(1).isDefault());
         assertTrue(switchStmt.getEntry(2).isDefault());
+    }
+
+    @Test
+    void classicSwitchWithNullDefault() {
+        SwitchStmt switchStmt = parseStatement("switch (value) {\n"
+                + "    case null, default: break;\n"
+                + "}")
+                .asSwitchStmt();
+
+        assertEquals(STATEMENT_GROUP, switchStmt.getEntry(0).getType());
+        assertEquals(1, switchStmt.getEntry(0).getLabels().size());
+        assertInstanceOf(NullLiteralExpr.class, switchStmt.getEntry(0).getLabels().get(0));
+        assertTrue(switchStmt.getEntry(0).isDefault());
+    }
+
+    @Test
+    void classicSwitchWithPattern() {
+        SwitchStmt switchStmt = parseStatement("switch (value) {\n"
+                + "    case String s: break;\n"
+                + "}")
+                .asSwitchStmt();
+
+        assertEquals(STATEMENT_GROUP, switchStmt.getEntry(0).getType());
+        assertEquals(1, switchStmt.getEntry(0).getLabels().size());
+        assertInstanceOf(TypePatternExpr.class, switchStmt.getEntry(0).getLabels().get(0));
+        assertFalse(switchStmt.getEntry(0).isDefault());
     }
 
     @Test
