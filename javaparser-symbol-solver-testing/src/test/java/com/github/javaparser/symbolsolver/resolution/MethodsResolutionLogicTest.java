@@ -21,24 +21,44 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
@@ -86,6 +106,63 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
         ResolvedReferenceType classOfRuntimeType = (ResolvedReferenceType) rawClassType.replaceTypeVariables(rawClassType.getTypeDeclaration().get().getTypeParameters().get(0), runtimeException);
         MethodUsage mu = constructorDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("isThrows(java.lang.Class<? extends java.lang.Throwable>)")).findFirst().get();
 
-        assertEquals(true, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfRuntimeType), typeSolver));
+        assertEquals(
+                true,
+                MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfRuntimeType), typeSolver));
+    }
+
+    // related to issue https://github.com/javaparser/javaparser/issues/4330
+    @Test
+    void compatibilityShouldConsiderAlsoTypeVariables() {
+        ReflectionInterfaceDeclaration declaration =
+                (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
+        MethodUsage mu = declaration.getAllMethods().stream()
+                .filter(m ->
+                        m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)"))
+                .findFirst()
+                .get();
+
+        ResolvedType typeParam =
+                genericType(Consumer.class.getCanonicalName(), superBound(String.class.getCanonicalName()));
+
+        assertEquals(true, MethodResolutionLogic.isApplicable(mu, "forEach", ImmutableList.of(typeParam), typeSolver));
+    }
+
+    @Test
+    void differingParameterCountsWhenSolvingAsUsage() throws IOException {
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new ReflectionTypeSolver());
+        combinedTypeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/DifferentParameterLengths/Test.jar")));
+        ParserConfiguration configuration = new ParserConfiguration();
+        configuration.setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
+
+        JavaParser parser = new JavaParser(configuration);
+
+        ParseResult<CompilationUnit> result =
+                parser.parse(adaptPath("src/test/resources/DifferentParameterLengths/CallTest.java"));
+        assertTrue(result.getProblems().isEmpty());
+
+        CompilationUnit cu = result.getResult().get();
+
+        MethodCallExpr call = Navigator.findMethodCall(cu, "test").get();
+
+        ResolvedType callType = call.calculateResolvedType();
+        assertEquals("java.lang.String", callType.describe());
+    }
+
+    private List<ResolvedType> types(String... types) {
+        return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
+    }
+
+    private ResolvedType type(String type) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type));
+    }
+
+    private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), Arrays.asList(parameterTypes));
+    }
+
+    private ResolvedType superBound(String type) {
+        return ResolvedWildcard.superBound(type(type));
     }
 }
