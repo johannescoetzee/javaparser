@@ -51,32 +51,35 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
 
     private boolean isAsterisk;
 
+    private boolean isModule;
+
     private ImportDeclaration() {
-        this(null, new Name(), false, false);
+        this(null, new Name(), false, false, false);
     }
 
-    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
+    public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk, boolean isModule) {
         // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
         // declaration of the form ‘x.*’ by specifying only ‘x’.
         // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
         // create an import declaration of the form ‘x.*’.
-        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name));
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name), isModule);
     }
 
     @AllFieldsConstructor
-    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
-        this(null, name, isStatic, isAsterisk);
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
+        this(null, name, isStatic, isAsterisk, isModule);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
+    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk, boolean isModule) {
         super(tokenRange);
         setName(name);
         setStatic(isStatic);
         setAsterisk(isAsterisk);
+        setModule(isModule);
         customInitialization();
     }
 
@@ -140,6 +143,11 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isModule() {
+        return isModule;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return isStatic;
     }
@@ -200,5 +208,15 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setModule(final boolean isModule) {
+        if (isModule == this.isModule) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODULE, this.isModule, isModule);
+        this.isModule = isModule;
+        return this;
     }
 }

@@ -419,7 +419,7 @@ class HashCodeVisitorTest {
 
     @Test
     void testVisitImportDeclaration() {
-        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false));
+        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false, false));
         HashCodeVisitor.hashCode(node);
         verify(node, times(1)).isAsterisk();
         verify(node, times(1)).isStatic();

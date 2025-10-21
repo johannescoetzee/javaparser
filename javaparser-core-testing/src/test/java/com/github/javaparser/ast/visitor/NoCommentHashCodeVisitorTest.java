@@ -477,7 +477,7 @@ class NoCommentHashCodeVisitorTest {
 
     @Test
     void testVisitImportDeclaration() {
-        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false));
+        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false, false));
         NoCommentHashCodeVisitor.hashCode(node);
 
         verify(node, times(1)).isAsterisk();

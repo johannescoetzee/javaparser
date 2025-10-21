@@ -47,12 +47,12 @@ class EclipseImportOrderingStrategyTest {
     void sortImports_givenImports_ThenImportsShouldBeInCorrectLocation() {
 
         NodeList<ImportDeclaration> imports = new NodeList<>();
-        imports.add(new ImportDeclaration("org.junit.jupiter.api.Assertions.assertEquals", true, false));
-        imports.add(new ImportDeclaration("org.junit.jupiter.api.Assertions", false, false));
-        imports.add(new ImportDeclaration("java.util.List", false, false));
-        imports.add(new ImportDeclaration("javax.swing", false, true));
-        imports.add(new ImportDeclaration("com.example.Test", false, false));
-        imports.add(new ImportDeclaration("pt.example.OtherTest", false, false));
+        imports.add(new ImportDeclaration("org.junit.jupiter.api.Assertions.assertEquals", true, false, false));
+        imports.add(new ImportDeclaration("org.junit.jupiter.api.Assertions", false, false, false));
+        imports.add(new ImportDeclaration("java.util.List", false, false, false));
+        imports.add(new ImportDeclaration("javax.swing", false, true, false));
+        imports.add(new ImportDeclaration("com.example.Test", false, false, false));
+        imports.add(new ImportDeclaration("pt.example.OtherTest", false, false, false));
 
         List<NodeList<ImportDeclaration>> actual = strategy.sortImports(imports);
         assertEquals(6, actual.size());
@@ -81,8 +81,8 @@ class EclipseImportOrderingStrategyTest {
     @Test
     void sortImports_givenUnsortedImportsAndSortingIsTrue_ThenImportsShouldBeSorted() {
         NodeList<ImportDeclaration> imports = new NodeList<>();
-        imports.add(new ImportDeclaration("com.example.B", false, false));
-        imports.add(new ImportDeclaration("com.example.A", false, false));
+        imports.add(new ImportDeclaration("com.example.B", false, false, false));
+        imports.add(new ImportDeclaration("com.example.A", false, false, false));
 
         strategy.setSortImportsAlphabetically(true);
 

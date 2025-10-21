@@ -37,7 +37,7 @@ public class Issue1634Test extends AbstractLexicalPreservingTest {
 
         NodeList<ImportDeclaration> imports = cu.getImports();
         String str = "lombok.Data";
-        imports.add(new ImportDeclaration(str, false, false));
+        imports.add(new ImportDeclaration(str, false, false, false));
 
         assertEquals(expected, LexicalPreservingPrinter.print(cu));
     }

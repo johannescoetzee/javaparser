@@ -87,7 +87,7 @@ public class TypeCastingGenerator extends NodeGenerator {
             ClassOrInterfaceDeclaration nodeCoid,
             ClassOrInterfaceDeclaration baseCoid,
             String typeName) {
-        baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
+        baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false, false);
 
         final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f(
                 "public %s as%s() { throw new IllegalStateException(f(\"%%s is not %s, it is %%s\", this, this.getClass().getSimpleName())); }",

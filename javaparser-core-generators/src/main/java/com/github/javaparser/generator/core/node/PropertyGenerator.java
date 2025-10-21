@@ -97,12 +97,12 @@ public class PropertyGenerator extends NodeGenerator {
             if (property.isNonEmpty() && property.isSingular()) {
                 nodeCoid.findCompilationUnit()
                         .get()
-                        .addImport("com.github.javaparser.utils.Utils.assertNonEmpty", true, false);
+                        .addImport("com.github.javaparser.utils.Utils.assertNonEmpty", true, false, false);
                 body.addStatement(f("assertNonEmpty(%s);", name));
             } else if (type != boolean.class && type != int.class) {
                 nodeCoid.findCompilationUnit()
                         .get()
-                        .addImport("com.github.javaparser.utils.Utils.assertNotNull", true, false);
+                        .addImport("com.github.javaparser.utils.Utils.assertNotNull", true, false, false);
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }

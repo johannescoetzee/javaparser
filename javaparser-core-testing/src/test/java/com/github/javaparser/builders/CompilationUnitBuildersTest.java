@@ -54,7 +54,8 @@ class CompilationUnitBuildersTest {
         cu.addImport(List.class);
         assertEquals(2, cu.getImports().size());
 
-        cu.addImport(com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport", true, false);
+        cu.addImport(
+                com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport", true, false, false);
         assertEquals(3, cu.getImports().size());
 
         assertEquals(
@@ -164,7 +165,7 @@ class CompilationUnitBuildersTest {
     @Test
     void duplicateByAsterisk() {
         // check asterisk imports
-        cu.addImport("my", false, true);
+        cu.addImport("my", false, true, false);
         cu.addImport("my.Import");
         cu.addImport("my.AnotherImport");
         cu.addImport("my.other.Import");
@@ -212,7 +213,7 @@ class CompilationUnitBuildersTest {
     @Test
     void doNotAddDuplicateImportsByStringAndFlags() {
         cu.addImport(Map.class);
-        cu.addImport("java.util.Map", false, false);
+        cu.addImport("java.util.Map", false, false, false);
         assertEquals(1, cu.getImports().size());
     }
 

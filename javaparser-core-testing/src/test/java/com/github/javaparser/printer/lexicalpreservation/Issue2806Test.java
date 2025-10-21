@@ -40,7 +40,7 @@ class Issue2806Test extends AbstractLexicalPreservingTest {
                 + "\n"
                 + "public class A {\n"
                 + "}";
-        ImportDeclaration importDeclaration = new ImportDeclaration("java.nio.file.Paths", false, false);
+        ImportDeclaration importDeclaration = new ImportDeclaration("java.nio.file.Paths", false, false, false);
         CompilationUnit compilationUnit = cu.addImport(importDeclaration);
         String out = LexicalPreservingPrinter.print(compilationUnit);
         assertThat(out, equalTo(junit5));

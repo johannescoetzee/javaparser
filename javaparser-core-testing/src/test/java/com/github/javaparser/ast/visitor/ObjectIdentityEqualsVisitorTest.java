@@ -774,8 +774,8 @@ class ObjectIdentityEqualsVisitorTest {
 
     @Test
     void equals_GivenImportDeclaration() {
-        Node nodeA = new ImportDeclaration("a", false, false);
-        Node nodeB = new ImportDeclaration("b", false, false);
+        Node nodeA = new ImportDeclaration("a", false, false, false);
+        Node nodeB = new ImportDeclaration("b", false, false, false);
 
         Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
         Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));

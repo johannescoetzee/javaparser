@@ -262,7 +262,7 @@ class ObjectIdentityHashCodeVisitorTest {
 
     @Test
     void testVisitImportDeclaration() {
-        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false));
+        ImportDeclaration node = spy(new ImportDeclaration(new Name(), false, false, false));
         assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
     }
 
