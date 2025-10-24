@@ -177,12 +177,45 @@ public class CombinedTypeSolver implements TypeSolver {
     }
 
     @Override
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeInModule(String moduleQualifiedName, String simpleTypeName) {
+        // TODO Handle cached types
+
+        for (TypeSolver ts : elements) {
+            try {
+                SymbolReference<ResolvedReferenceTypeDeclaration> res = ts.tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName);
+                if (res.isSolved()) {
+                    // TODO Cache
+                    return res;
+                }
+            } catch (Exception e) {
+                if (!exceptionHandler.test(e)) { // we shouldn't ignore this exception
+                    throw e;
+                }
+            }
+        }
+
+        // When unable to solve, cache the value with unsolved symbol
+        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved();
+        // TODO Cache
+        return unsolvedSymbol;
+    }
+
+    @Override
     public ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
         SymbolReference<ResolvedReferenceTypeDeclaration> res = tryToSolveType(name);
         if (res.isSolved()) {
             return res.getCorrespondingDeclaration();
         }
         throw new UnsolvedSymbolException(name);
+    }
+
+    @Override
+    public ResolvedReferenceTypeDeclaration solveTypeInModule(String moduleQualifiedName, String simpleTypeName) throws UnsolvedSymbolException {
+        SymbolReference<ResolvedReferenceTypeDeclaration> res = tryToSolveTypeInModule(moduleQualifiedName, simpleTypeName);
+        if (res.isSolved()) {
+            return res.getCorrespondingDeclaration();
+        }
+        throw new UnsolvedSymbolException("module=" + moduleQualifiedName + " type=" + simpleTypeName);
     }
 
     /**
